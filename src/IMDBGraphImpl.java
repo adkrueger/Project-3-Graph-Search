@@ -6,9 +6,11 @@ import java.util.regex.Pattern;
 public class IMDBGraphImpl implements IMDBGraph {
     private final HashMap<String, IMDBNode> movies = new HashMap<>();
     private final HashMap<String, IMDBNode> actors = new HashMap<>();
-    private Pattern p = Pattern.compile("([^\\t]+) [(][\\d+/?]{4}([)]|[/])([\\w]?)+[)]?");
+    private Pattern p;
+
 
     IMDBGraphImpl(String actorsFilename, String actressesFilename) throws IOException {
+        p = Pattern.compile("([^\\t]+) [(][\\d+/?]{4}([)]|[/])([\\w]?)+[)]?");
         Scanner scanner = new Scanner(new FileInputStream(actressesFilename), "ISO-8859-1");
         iterateScanner(scanner);
         scanner.close();
@@ -40,8 +42,6 @@ public class IMDBGraphImpl implements IMDBGraph {
                 // Get actor's name and preliminary movie name (will have to be edited later)
                 else if (!line.substring(0, 1).contains("\t")) {
                     currentActor = line.substring(0, line.indexOf("\t")).trim();
-
-
                 }
                 String movie = getMovieName(line);
                 if (movie != null) {
@@ -57,6 +57,7 @@ public class IMDBGraphImpl implements IMDBGraph {
     }
 
     private String getMovieName(String movieName) {
+        movieName.trim();
         if (!movieName.substring(0, 1).contains("\"") && !movieName.contains(" (TV) ")) {
             return cleanMovie(movieName);
         } else {
@@ -66,21 +67,19 @@ public class IMDBGraphImpl implements IMDBGraph {
 
     private void addMoviesToActor(String actor, ArrayList<String> movieNames) {
         IMDBNode newActor = new IMDBNode(actor);
-        actors.put(actor, newActor);
-        System.out.println(actor);
-
+        actors.putIfAbsent(actor, newActor);
         for (String movie : movieNames) {
             if (movies.containsKey(movie)) {
                 // Old node, already exists
                 IMDBNode movieNode = movies.get(movie);
                 movieNode.addNode(newActor);
                 newActor.addNode(movieNode);
-                movies.put(movie, movieNode);
+                movies.putIfAbsent(movie, movieNode);
             } else {
                 IMDBNode movieNode = new IMDBNode(movie);
                 movieNode.addNode(newActor);
                 newActor.addNode(movieNode);
-                movies.put(movie, movieNode);
+                movies.putIfAbsent(movie, movieNode);
             }
         }
     }

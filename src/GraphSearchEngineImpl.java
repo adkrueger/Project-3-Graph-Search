@@ -12,7 +12,6 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
     public List<Node> findShortestPath(Node s, Node t) {
         ArrayList<Node> visitedNodes = new ArrayList<>();
         LinkedList<Node> nodesToVisit = new LinkedList<>();
-        Node n;
 
         HashMap<Node, Integer> distanceFromS = new HashMap<>();
         ArrayList<Node> shortestPath = new ArrayList<>();
@@ -21,7 +20,7 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
         distanceFromS.put(s, 0);
 
         while (nodesToVisit.size() > 0) {
-            n = nodesToVisit.pollFirst();
+            Node n = nodesToVisit.pollFirst();
             visitedNodes.add(n);
             if(n.equals(t)) {
                 break;
@@ -40,6 +39,7 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
         }
 
         if(distanceFromS.get(t) != null) {
+            visitedNodes.remove(s);
             int k = distanceFromS.get(t);
             shortestPath.add(t);
             backTrackSearch(visitedNodes, k - 1, t, distanceFromS, shortestPath);
@@ -54,15 +54,20 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
 
     private void backTrackSearch(ArrayList<Node> visited, int k, Node t, HashMap<Node, Integer> distanceFromS, ArrayList<Node> shortestPath)
     {
-        if(k != 0)
+        while(k > 0)
         {
+            System.out.println("-------------");
             for (Node n : visited)
             {
-                if(distanceFromS.get(n) == k && n.getNeighbors().contains(t)) {
-                    shortestPath.add(n);
-                    backTrackSearch(visited, k - 1, n, distanceFromS, shortestPath);
-                    break;
+                if(distanceFromS.get(n) == k) {
+                    if(n.getNeighbors().contains(t)) {
+                        shortestPath.add(n);
+                        t = n;
+                        k--;
+                        break;
+                    }
                 }
+                System.out.println("Visited node " + n.getName() + " with distance of " + distanceFromS.get(n) + " when distance was " + k);
             }
         }
     }
