@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -44,7 +43,7 @@ public class IMDBGraphImpl implements IMDBGraph {
                 else if (!line.substring(0, 1).contains("\t")) {
                     currentActor = line.substring(0, line.indexOf("\t")).trim();
                 }
-                String movie = getMovieName(line);
+                String movie = getMovieName(line.substring(line.indexOf("\t")));
                 if (!movie.equals("")) {
                     moviesToBeAdded.add(movie);
                 }
@@ -59,7 +58,7 @@ public class IMDBGraphImpl implements IMDBGraph {
 
     private String getMovieName(String movieName) {
         movieName = movieName.trim();
-        if (!movieName.substring(0, 1).contains("\"") && !movieName.contains(" (TV) ")) {
+        if (movieName.charAt(0) != '"' && !movieName.contains(" (TV) ")) {
             return cleanMovie(movieName);
         } else {
             return "";

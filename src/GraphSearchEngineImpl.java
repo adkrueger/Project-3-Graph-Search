@@ -67,7 +67,6 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
                         break;
                     }
                 }
-                System.out.println("Visited node " + n.getName() + " with distance of " + distanceFromS.get(n) + " when distance was " + k);
             }
         }
     }
