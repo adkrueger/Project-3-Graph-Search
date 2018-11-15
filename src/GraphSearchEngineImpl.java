@@ -29,7 +29,6 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
             for (Node neighbor : n.getNeighbors()) {
                 if (!visitedNodes.contains(neighbor) && !nodesToVisit.contains(neighbor)) {
                     nodesToVisit.add(neighbor);
-                    System.out.println(neighbor.getName() + " was just visited.");
                     distanceFromS.put(neighbor, distanceFromS.get(n) + 1);
                     if(neighbor.equals(t))
                     {
