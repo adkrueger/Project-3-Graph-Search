@@ -101,9 +101,9 @@ public class GraphSearchGUI extends Application {
 			return;
 		}
 
-		final ListView<String> actorsList1 = new ListView<String>(getSortedObservableList(graph.getActors()));
-		final ListView<String> actorsList2 = new ListView<String>(getSortedObservableList(graph.getActors()));
-		final ListView<String> resultsList = new ListView<String>();
+		final ListView<String> actorsList1 = new ListView<>(getSortedObservableList(graph.getActors()));
+		final ListView<String> actorsList2 = new ListView<>(getSortedObservableList(graph.getActors()));
+		final ListView<String> resultsList = new ListView<>();
 
 		// Create the panels of the GIU
 		final VBox rootPanel = new VBox();
